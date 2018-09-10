@@ -34,3 +34,18 @@ class DbActions:
         finally:
             if conn is not None:
                 conn.close()
+
+    def get_words_by_book(self, book):
+        conn = None
+        try:
+            sql = 'select * from tanakh where book = ?;'
+            conn = sqlite3.connect('tanakh.db')
+            cur = conn.cursor()
+            cur.execute(sql, (book,))
+            return cur.fetchall()
+        except Exception as ex:
+            print(ex)
+            exit(1)
+        finally:
+            if conn is not None:
+                conn.close()
