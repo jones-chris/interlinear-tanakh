@@ -5,7 +5,6 @@ from DbActions import DbActions
 pdf = FPDF()
 pdf.add_page()
 font = 'SBL_Hbrw'
-# pdf.add_font(font, '', 'C:\Windows\Fonts\{}.ttf'.format(font), uni=True)
 pdf.add_font(font, '', '{}.ttf'.format(font), uni=True)
 pdf.set_font(font, '', 20)
 
@@ -15,28 +14,115 @@ x_origin = pdf.w - pdf.r_margin - cell_w
 pdf.set_x(x_origin)
 
 db_actions = DbActions()
-words = db_actions.get_words_by_book('genesis')
+eng_tran_words = db_actions.get_eng_tran_by_book('genesis')
+heb_text_words = db_actions.get_heb_word_by_book('genesis')
+strongs_ref_words = db_actions.get_strongs_ref_by_book('genesis')
+heb_meaning_words = db_actions.get_heb_meaning_by_book('genesis')
 
-for word in words:
-    #chapter = word[1]
-    #verse = word[2]
-    hebrew_text = word[4][::-1] # Reverse so that word does not print backwards on pdf.
-    #romanized_text = word[5]
-    #english_translation = word[6]
-    #strongs_ref = word[7]
+for i in range(0, len(heb_text_words), 6):
 
-    # Check that there is enough room to print another cell horizontally (x-axis)
-    if pdf.l_margin > (pdf.get_x() - cell_w):
-        # get remainder and write cell with word
-        last_cell_w = pdf.get_x() - pdf.l_margin
-        pdf.cell(last_cell_w, cell_h, txt=hebrew_text, border=0)
+    while pdf.get_x() > pdf.l_margin:
+        # Decrease font
+        pdf.set_font(font, '', 10)
 
-        # move cursor to next line (y) and back to right side of document (x)
-        pdf.set_y(pdf.get_y() + cell_h)
-        pdf.set_x(x_origin)
-    else:
-        pdf.cell(cell_w, cell_h, txt=hebrew_text, border=0)
-        pdf.set_x(pdf.get_x() - cell_w - cell_w) # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+        try:
+
+            # Write one line of english translation words
+            pdf.cell(cell_w, cell_h, txt=strongs_ref_words[i][0])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=strongs_ref_words[i+1][0])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=strongs_ref_words[i+2][0])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=strongs_ref_words[i+3][0])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=strongs_ref_words[i+4][0])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            # Get remainder and write cell with word
+            last_cell_w = pdf.get_x() - pdf.l_margin
+            pdf.cell(last_cell_w, cell_h, txt=strongs_ref_words[i+5][0], border=0)
+            pdf.set_x(pdf.get_x() - last_cell_w - last_cell_w) # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+        except (AttributeError, IndexError):
+            break
+
+    # Go to down one line and set cursor at right side of page.
+    pdf.set_y(pdf.get_y() + cell_h)
+    pdf.set_x(x_origin)
+
+
+    while pdf.get_x() > pdf.l_margin:
+        # Increase font
+        pdf.set_font(font, '', 20)
+
+        try:
+
+            # Write one line of english translation words
+            pdf.cell(cell_w, cell_h, txt=heb_text_words[i][0][::-1])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=heb_text_words[i+1][0][::-1])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=heb_text_words[i+2][0][::-1])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=heb_text_words[i+3][0][::-1])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=heb_text_words[i+4][0][::-1])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            # Get remainder and write cell with word
+            last_cell_w = pdf.get_x() - pdf.l_margin
+            pdf.cell(last_cell_w, cell_h, txt=heb_text_words[i+5][0][::-1], border=0)
+            pdf.set_x(pdf.get_x() - last_cell_w - last_cell_w) # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+        except (AttributeError, IndexError):
+            break
+
+    # Go to down one line and set cursor at right side of page.
+    pdf.set_y(pdf.get_y() + cell_h)
+    pdf.set_x(x_origin)
+
+    while pdf.get_x() > pdf.l_margin:
+        # Decrease font
+        pdf.set_font(font, '', 10)
+
+        try:
+
+            # Write one line of english translation words
+            pdf.cell(cell_w, cell_h, txt=eng_tran_words[i][0])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=eng_tran_words[i+1][0])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=eng_tran_words[i+2][0])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=eng_tran_words[i+3][0])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            pdf.cell(cell_w, cell_h, txt=eng_tran_words[i+4][0])
+            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+            # Get remainder and write cell with word
+            last_cell_w = pdf.get_x() - pdf.l_margin
+            pdf.cell(last_cell_w, cell_h, txt=eng_tran_words[i+5][0], border=0)
+            pdf.set_x(pdf.get_x() - last_cell_w - last_cell_w) # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+
+        except (AttributeError, IndexError):
+            break
+
+    # Go to down one line and set cursor at right side of page.
+    pdf.set_y(pdf.get_y() + cell_h)
+    pdf.set_x(x_origin)
 
 pdf.output('tanakh.pdf', 'F')
 
