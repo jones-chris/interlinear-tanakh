@@ -40,7 +40,7 @@ class DbActions:
         conn = None
         try:
             sql = 'select * from tanakh where book = ?;'
-            conn = sqlite3.connect('tanakh.db')
+            conn = sqlite3.connect('./data/tanakh.db')
             cur = conn.cursor()
             cur.execute(sql, (book,))
             return cur.fetchall()
@@ -55,7 +55,7 @@ class DbActions:
         conn = None
         try:
             sql = 'select strongs_ref from tanakh where book = ?;'
-            conn = sqlite3.connect('tanakh.db')
+            conn = sqlite3.connect('./data/tanakh.db')
             cur = conn.cursor()
             cur.execute(sql, (book,))
             return cur.fetchall()
@@ -70,7 +70,7 @@ class DbActions:
         conn = None
         try:
             sql = 'select heb_word from tanakh where book = ?;'
-            conn = sqlite3.connect('tanakh.db')
+            conn = sqlite3.connect('./data/tanakh.db')
             cur = conn.cursor()
             cur.execute(sql, (book,))
             return cur.fetchall()
@@ -85,7 +85,7 @@ class DbActions:
         conn = None
         try:
             sql = 'select eng_tran from tanakh where book = ?;'
-            conn = sqlite3.connect('tanakh.db')
+            conn = sqlite3.connect('./data/tanakh.db')
             cur = conn.cursor()
             cur.execute(sql, (book,))
             return cur.fetchall()
@@ -100,7 +100,7 @@ class DbActions:
         conn = None
         try:
             sql = 'select heb_meaning from tanakh where book = ?;'
-            conn = sqlite3.connect('tanakh.db')
+            conn = sqlite3.connect('./data/tanakh.db')
             cur = conn.cursor()
             cur.execute(sql, (book,))
             return cur.fetchall()

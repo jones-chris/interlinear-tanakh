@@ -2,6 +2,8 @@ from fpdf import FPDF
 from DbActions import DbActions
 
 
+PEI = 'פ'
+
 pdf = FPDF()
 pdf.add_page()
 font = 'SBL_Hbrw'
@@ -27,21 +29,9 @@ for i in range(0, len(heb_text_words), 6):
 
         try:
 
-            # Write one line of english translation words
-            pdf.cell(cell_w, cell_h, txt=strongs_ref_words[i][0])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=strongs_ref_words[i+1][0])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=strongs_ref_words[i+2][0])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=strongs_ref_words[i+3][0])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=strongs_ref_words[i+4][0])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+            for j in range(0, 5, 1):
+                pdf.cell(cell_w, cell_h, txt=strongs_ref_words[i+j][0])
+                pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
 
             # Get remainder and write cell with word
             last_cell_w = pdf.get_x() - pdf.l_margin
@@ -62,21 +52,9 @@ for i in range(0, len(heb_text_words), 6):
 
         try:
 
-            # Write one line of english translation words
-            pdf.cell(cell_w, cell_h, txt=heb_text_words[i][0][::-1])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=heb_text_words[i+1][0][::-1])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=heb_text_words[i+2][0][::-1])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=heb_text_words[i+3][0][::-1])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=heb_text_words[i+4][0][::-1])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+            for j in range(0, 5, 1):
+                pdf.cell(cell_w, cell_h, txt=heb_text_words[i + j][0][::-1])
+                pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
 
             # Get remainder and write cell with word
             last_cell_w = pdf.get_x() - pdf.l_margin
@@ -96,21 +74,9 @@ for i in range(0, len(heb_text_words), 6):
 
         try:
 
-            # Write one line of english translation words
-            pdf.cell(cell_w, cell_h, txt=eng_tran_words[i][0])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=eng_tran_words[i+1][0])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=eng_tran_words[i+2][0])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=eng_tran_words[i+3][0])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
-
-            pdf.cell(cell_w, cell_h, txt=eng_tran_words[i+4][0])
-            pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
+            for j in range(0, 5, 1):
+                pdf.cell(cell_w, cell_h, txt=eng_tran_words[i+j][0])
+                pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
 
             # Get remainder and write cell with word
             last_cell_w = pdf.get_x() - pdf.l_margin
@@ -124,6 +90,6 @@ for i in range(0, len(heb_text_words), 6):
     pdf.set_y(pdf.get_y() + cell_h)
     pdf.set_x(x_origin)
 
-pdf.output('tanakh.pdf', 'F')
+pdf.output('./pdfs/tanakh.pdf', 'F')
 
 
