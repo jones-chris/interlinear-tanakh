@@ -7,8 +7,16 @@ def print_line_of_words_right_to_left(pdf, font, font_size, cell_w, cell_h, word
     while pdf.get_x() > pdf.l_margin:
         pdf.set_font(font, '', font_size)
 
+        #TODO test if we get an attribute error when printing a Pei.
+        #TODO cont'd:  all the strongs_refs and eng_tran are blank for a line after a Pei.
         try:
-            for j in range(0, 5, 1):
+            for j in range(0, len(words)-1, 1):
+                # If the word is None, then print empty text and continue.  This is mostly to catch the Pei of Sameck.
+                if words[j][0] is None:
+                    pdf.cell(cell_w, cell_h, txt='')
+                    pdf.set_x(pdf.get_x() - cell_w - cell_w)
+                    continue
+
                 word = words[j][0][::-1] if reverse_word else words[j][0]
                 pdf.cell(cell_w, cell_h, txt=word)
                 pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
@@ -33,7 +41,7 @@ pdf.add_page()
 
 #font = 'SBL_Hbrw'
 font = 'times'
-pdf.add_font(font, '', '{}.ttf'.format(font), uni=True)
+pdf.add_font(font, '', './{}.ttf'.format(font), uni=True)
 
 cell_w = 30
 cell_h = 10
@@ -50,13 +58,14 @@ for book in Constants().torah:
     heb_meaning_words = db_actions.get_heb_meaning_by_book(book)
 
     for i in range(0, len(heb_text_words), 6):
-        print_line_of_words_right_to_left(pdf, font, 10, cell_w, cell_h, strongs_ref_words[i:i+6])
+        print_line_of_words_right_to_left(pdf, font, 10, cell_w, 12, strongs_ref_words[i:i+6])
         move_down_one_line(cell_h, x_origin)
 
-        print_line_of_words_right_to_left(pdf, font, 20, cell_w, cell_h, heb_text_words[i:i+6], True)
+        print_line_of_words_right_to_left(pdf, font, 20, cell_w, 6, heb_text_words[i:i+6], True)
         move_down_one_line(cell_h, x_origin)
 
-        print_line_of_words_right_to_left(pdf, font, 10, cell_w, cell_h, eng_tran_words[i:i+6])
+        #print_line_of_words_right_to_left(pdf, font, 10, cell_w, 1, eng_tran_words[i:i+6])
+        print_line_of_words_right_to_left(pdf, font, 10, cell_w, 1, ['', '', '', '', '', ''])
         move_down_one_line(cell_h, x_origin)
 
 pdf.output('./pdfs/tanakh.pdf', 'F')
