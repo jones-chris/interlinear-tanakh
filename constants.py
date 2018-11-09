@@ -2,11 +2,11 @@
 
 class Constants:
     torah = [
-        'genesis'
-        # 'exodus',
-        # 'leviticus',
-        # 'numbers',
-        # 'deuteronomy'
+        'genesis',
+        'exodus',
+        'leviticus',
+        'numbers',
+        'deuteronomy'
     ]
 
     tanakh = {

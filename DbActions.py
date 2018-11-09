@@ -39,7 +39,7 @@ class DbActions:
     def get_words_by_book(self, book):
         conn = None
         try:
-            sql = 'select * from tanakh where book = ?;'
+            sql = 'select book, chapter, verse, heb_word, strongs_ref from tanakh where book = ?;'
             conn = sqlite3.connect('./data/tanakh.db')
             cur = conn.cursor()
             cur.execute(sql, (book,))
