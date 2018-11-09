@@ -5,10 +5,14 @@ from constants import Constants
 
 def print_line_of_words_right_to_left(pdf, font, font_size, cell_w, cell_h, words, reverse_word=False):
     while pdf.get_x() > pdf.l_margin:
+        # Uncomment these lines to set a breakpoint when words collection's length is less than the usual 6 items.
+        # if len(words) < 6:
+        #     print(words)
         pdf.set_font(font, '', font_size)
 
         #TODO test if we get an attribute error when printing a Pei.  All the strongs_refs and eng_tran are blank for a line after a Pei.
         try:
+            # Loop through all words in words collection except for last word.
             for j in range(0, len(words)-1, 1):
                 # If the word is None, then print empty text and continue.  This is mostly to catch the Pei of Sameck.
                 if words[j] is None:
@@ -20,9 +24,10 @@ def print_line_of_words_right_to_left(pdf, font, font_size, cell_w, cell_h, word
                 pdf.cell(cell_w, cell_h, txt=word)
                 pdf.set_x(pdf.get_x() - cell_w - cell_w)  # Subtract cell_w twice because cell() increases pdf object's x property by w parameter automatically.
 
-            # Get remainder and write cell with word
+            # For last word in words, get remainder and write cell with word
             last_cell_w = pdf.get_x() - pdf.l_margin
-            word = words[5][::-1] if reverse_word else words[5]
+            last_index = len(words)-1
+            word = words[last_index][::-1] if reverse_word else words[last_index]
             pdf.cell(last_cell_w, cell_h, txt=word)
             pdf.set_x(pdf.get_x() - last_cell_w - last_cell_w)
         # If we reach the end of the list before finishing the loop, then just break the loop.
