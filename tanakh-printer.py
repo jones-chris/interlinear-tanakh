@@ -1,13 +1,9 @@
 from fpdf import FPDF
 from DbActions import DbActions
-from constants import Constants
+import constants
 
 
 def print_line_of_words_right_to_left(pdf, font, font_size, cell_w, cell_h, words, reverse_word=False):
-    while pdf.get_x() > pdf.l_margin:
-        # Uncomment these lines to set a breakpoint when words collection's length is less than the usual 6 items.
-        # if len(words) < 6:
-        #     print(words)
         pdf.set_font(font, '', font_size)
 
         #TODO test if we get an attribute error when printing a Pei.  All the strongs_refs and eng_tran are blank for a line after a Pei.
@@ -32,29 +28,28 @@ def print_line_of_words_right_to_left(pdf, font, font_size, cell_w, cell_h, word
             pdf.set_x(pdf.get_x() - last_cell_w - last_cell_w)
         # If we reach the end of the list before finishing the loop, then just break the loop.
         except (AttributeError, IndexError):
-            break
+            None
+            # break
 
 
 def move_down_one_line(cell_h, x_origin):
     pdf.set_y(pdf.get_y() + cell_h)
     pdf.set_x(x_origin)
 
-
-pdf = FPDF()
-pdf.add_page()
-
-font = 'times'
-pdf.add_font(font, '', './{}.ttf'.format(font), uni=True)
-
-cell_w = 30
-cell_h = 10
-x_origin = pdf.w - pdf.r_margin - cell_w
-pdf.set_x(x_origin)
-
 db_actions = DbActions()
 
+for book in constants.tanakh.keys():
+    pdf = FPDF()
+    pdf.add_page()
 
-for book in Constants().torah:
+    font = 'times'
+    pdf.add_font(font, '', './{}.ttf'.format(font), uni=True)
+
+    cell_w = 30
+    cell_h = 10
+    x_origin = pdf.w - pdf.r_margin - cell_w
+    pdf.set_x(x_origin)
+
     words = db_actions.get_words_by_book(book)
 
     #TODO:  add page with book title here.
@@ -78,6 +73,4 @@ for book in Constants().torah:
         print_line_of_words_right_to_left(pdf, font, 10, cell_w, 1, ['', '', '', '', '', ''])
         move_down_one_line(cell_h, x_origin)
 
-pdf.output('./pdfs/tanakh.pdf', 'F')
-
-
+    pdf.output('./pdfs/{}.pdf'.format(book), 'F')
